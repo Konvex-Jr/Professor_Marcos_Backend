@@ -24,7 +24,6 @@
     "description": "ArchitectureTemplate",
     "main": "dist/source/main.js",
     "author": "perozin.arthur@gmail.com",
-    "type": "module",
     "scripts": {
         "test": "jest --runInBand test/",
         "clean": "rm -rf dist/*/",

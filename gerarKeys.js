@@ -1,5 +1,5 @@
-import { generateKeyPairSync } from "node:crypto";
-import { fs } from "node:fs"
+const { generateKeyPairSync } = require("crypto");
+const fs = require("fs");
 
 const { publicKey, privateKey } = generateKeyPairSync("rsa", {
   modulusLength: 2048,
