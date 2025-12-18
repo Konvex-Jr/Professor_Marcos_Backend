@@ -10,19 +10,17 @@ import { v4 as uuid } from "uuid";
 export default class Post {
     
     readonly id: string
-    readonly post_type: string
     readonly description: string
-    readonly post: string
+    readonly post_string: string
     readonly created_at: Date
     readonly updated_at: Date
 
-    constructor(post_type: string, description: string, post: string, id?: string) {
+    constructor(description: string, post_string: string, id?: string) {
         
         if (!id) id = uuid()
         this.id = id
-        this.post_type = post_type
         this.description = description
-        this.post = post
+        this.post_string = post_string
         this.created_at = new Date()
         this.updated_at = new Date()
     

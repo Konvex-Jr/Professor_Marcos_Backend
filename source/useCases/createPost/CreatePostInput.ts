@@ -1,4 +1,4 @@
 export default interface CreatePostInput {
-    post: string
+    post_string: string
     description: string
 }

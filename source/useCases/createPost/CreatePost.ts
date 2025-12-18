@@ -16,9 +16,13 @@ export default class CreatePost {
     }
 
     async execute(input: CreatePostInput): Promise<CreatePostOutput> {
-
+        
         const description = input.description
-        const post_string = input.post
+        const post_string = input.post_string
+
+        if(!post_string){
+            throw new Error("String de imagem não fornecido")
+        }
 
         const post = new Post(description, post_string)
 
