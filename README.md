@@ -1,6 +1,6 @@
 # Professor Marcos Backend
 
-Este projeto é um backend modular em TypeScript, pronto para servir como base para aplicações como blogs, sistemas de usuários e outros sistemas web. Ele segue princípios de Clean Architecture, separando domínio, casos de uso, infraestrutura e testes.
+Este projeto é um backend em TypeScript, utilizado para o blog do site do Professor Marcos. Ele segue princípios de Clean Architecture, separando domínio, casos de uso, infraestrutura e testes.
 
 ---
 
