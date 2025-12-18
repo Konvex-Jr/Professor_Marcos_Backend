@@ -16,6 +16,7 @@ export default class FindUserById {
         if(!input.userId) throw new Error("Id do usuário não fornecido")
         const response = await this.userRepository.findById(input.userId);
         if (!response) throw new Error("Usuário não encontrado")
-        return {user: new User(response.email, response.password, response.id)};
+        
+        return { user: new User(response.email, response.password, response.id) };
     }
 }

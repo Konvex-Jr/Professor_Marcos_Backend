@@ -14,15 +14,17 @@ export default class Post {
     readonly post_string: string
     readonly created_at: Date
     readonly updated_at: Date
+    deleted: boolean
 
-    constructor(description: string, post_string: string, id?: string) {
+    constructor(description: string, post_string: string, created_at: Date, updated_at: Date, id?: string) {
         
         if (!id) id = uuid()
         this.id = id
         this.description = description
         this.post_string = post_string
-        this.created_at = new Date()
-        this.updated_at = new Date()
+        this.created_at = created_at
+        this.updated_at = updated_at
+        this.deleted = false
     
     }
 }
