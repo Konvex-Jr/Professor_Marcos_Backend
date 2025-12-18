@@ -1,13 +1,15 @@
 services:
-  postgres:
-    image: ankane/pgvector
+  db:
+    image: postgres:15
+    restart: always
     environment:
-      POSTGRES_DB: ${DB_DATABASE}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: db_professor_marcos
     ports:
-      - "${DB_PORT}:5432"
+      - "5432:5432" 
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
 volumes:
   postgres_data:

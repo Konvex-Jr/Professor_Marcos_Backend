@@ -76,21 +76,32 @@ Cada caso de uso tem sua própria pasta, com arquivos de input, output e lógica
    npm install
    ```
 2. Configure o arquivo `.env` com as variáveis do banco.
+
+    DB_HOST=localhost
+    DB_PORT=5432
+    DB_DATABASE=db_professor_marcos
+    DB_USERNAME=admin
+    DB_PASSWORD=admin
+
 3. Suba o banco de dados:
    ```bash
-   docker-compose up -d
-   ```
-4. Rode as migrations (se necessário).
-5. Inicie a aplicação:
-   ```bash
-   npm start
-   ```
-6. Execute os testes:
-   ```bash
-   npm test
+   docker compose up -d
    ```
 
----
+4. Verifique se o contêiner está rodando:
+    ```bash
+   docker ps
+   ```
+
+5. Rode os Testes:
+    ```bash
+   npm run test
+   ```
+
+6. Suba a aplicação:
+    ```bash
+   npm run main
+   ```
 
 ## Como Expandir
 

@@ -5,11 +5,7 @@ import Router from "./infra/http/Router";
 import DatabaseRepositoryFactory from "./infra/repository/DatabaseRepositoryFactory";
 import ExpressAuth from "./infra/http/Middleware/AuthExpress";
 import CreateUsersTable from "./infra/migrations/01.create_users_table";
-import CreateTokensTable from "./infra/migrations/02.create_tokens_table";
-import CreateChunksTable from "./infra/migrations/03.create_chunks_table";
-import CreateConversationsTable from "./infra/migrations/04.create_conversations_table";
-import CreateMessagesTable from "./infra/migrations/05.create_messages_table";
-import CreateFeedbacksTable from "./infra/migrations/06.create_feedbacks_table";
+import CreatePostsTable from "./infra/migrations/02.create_posts_table";
 
 config();
 
@@ -20,7 +16,7 @@ console.log({
   DB_PORT: process.env.DB_PORT,
   DB_DATABASE: process.env.DB_DATABASE,
   DB_USERNAME: process.env.DB_USERNAME ? "***" : "não definido",
-  PORT: process.env.PORT || 8000,
+  PORT: process.env.PORT || 5432,
 });
 
 async function runMigrations(connection: PostgreSQLConnection) {
@@ -28,11 +24,7 @@ async function runMigrations(connection: PostgreSQLConnection) {
   
   const migrations = [
     { name: "users", instance: new CreateUsersTable(connection) },
-    { name: "tokens", instance: new CreateTokensTable(connection) },
-    { name: "chunks", instance: new CreateChunksTable(connection) },
-    { name: "conversations", instance: new CreateConversationsTable(connection) },
-    { name: "messages", instance: new CreateMessagesTable(connection) },
-    { name: "feedbacks", instance: new CreateFeedbacksTable(connection) },
+    { name: "posts", instance: new CreatePostsTable(connection) }
   ];
 
   for (const migration of migrations) {

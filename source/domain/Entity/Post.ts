@@ -9,12 +9,12 @@ import { v4 as uuid } from "uuid";
 
 export default class Post {
     
-    readonly id: string
+    readonly id: string 
     readonly description: string
     readonly post_string: string
     readonly created_at: Date
     readonly updated_at: Date
-    deleted: boolean
+    readonly deleted_at: Date | null
 
     constructor(description: string, post_string: string, created_at: Date, updated_at: Date, id?: string) {
         
@@ -24,7 +24,7 @@ export default class Post {
         this.post_string = post_string
         this.created_at = created_at
         this.updated_at = updated_at
-        this.deleted = false
+        this.deleted_at = null
     
     }
 }
