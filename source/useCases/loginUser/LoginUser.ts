@@ -15,6 +15,7 @@ export default class LoginUser {
     }
 
     async execute(input: LoginUserInput): Promise<LoginUserOutput> {
+        
         const user = await this.userRepository.findByEmail(input.email);
         if(!user) throw new Error("Invalid credentials");
         const isEqual = await compare(input.password, user.password);
@@ -24,10 +25,12 @@ export default class LoginUser {
             userId: user.id,
             userEmail: user.email
         }
+        
         const accessToken = sign(payload, privateKey, {
             algorithm: "RS256",
             expiresIn: "24h"
         });
+       
         return {
             accessToken
         }

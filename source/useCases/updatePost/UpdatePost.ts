@@ -29,7 +29,11 @@ export default class UpdatePost {
             throw new Error("Post não encontrado")
         }
 
-        const post = new Post(response.description, response.post_string, response.created_at, new Date())
+        const description = input.post.description
+        const post_string = input.post.post_string
+        const created_at = response.created_at
+
+        const post = new Post(description, post_string, created_at, new Date())
 
         return {
             post

@@ -19,8 +19,10 @@ export default class FindPostByDate {
         
         if (!response) throw new Error("Post não encontrado")
     
+        const post = new Post(response.description, response.post_string, response.created_at, response.updated_at)
+
         return {
-            post: new Post(response.description, response.post_string, response.created_at, response.updated_at)
+            post
         }
     }
 }

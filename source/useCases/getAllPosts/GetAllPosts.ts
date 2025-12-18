@@ -12,10 +12,12 @@ export default class GetAllPosts {
 
     async execute(): Promise<GetAllPostsOutput> {
         
-        const response = await this.postRepository.getAll();
-        if(!response) throw new Error('Nenhum post cadastrado ou erro na requisição');
+        const response = await this.postRepository.getAll()
+        if(!response) throw new Error('Nenhum post cadastrado ou erro na requisição')
     
-        return { data: response };
+        return { 
+            data: response 
+        }
     
     }
 }

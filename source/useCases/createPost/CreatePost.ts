@@ -24,7 +24,7 @@ export default class CreatePost {
             throw new Error("String de imagem não fornecido")
         }
 
-        const post = new Post(description, post_string)
+        const post = new Post(description, post_string, new Date(), new Date())
 
         return {
             post
