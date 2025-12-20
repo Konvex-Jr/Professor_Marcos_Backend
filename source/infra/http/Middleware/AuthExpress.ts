@@ -19,12 +19,14 @@ export default class ExpressAuth implements Auth {
             });
         }
         const token = request.headers['access-token'];
+        
         try {
             const publicKey = readFileSync('./public.key', 'utf8');
             const data = verify(token, publicKey, { algorithms: ["RS256"] }) as { userId: string };
             const user = await this.userRepository.findById(data.userId);
             request.body.user = user;
             return next();
+        
         } catch (e) {
             return response.status(401).json({
                 message: 'Invalid token'

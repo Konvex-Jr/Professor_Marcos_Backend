@@ -17,10 +17,15 @@ export default class LoginUser {
     async execute(input: LoginUserInput): Promise<LoginUserOutput> {
         
         const user = await this.userRepository.findByEmail(input.email);
+        
         if(!user) throw new Error("Invalid credentials");
+        
         const isEqual = await compare(input.password, user.password);
+
         if (!isEqual) throw new Error("Invalid credentials");
+        
         const privateKey = readFileSync('./private.key');
+        
         const payload = {
             userId: user.id,
             userEmail: user.email

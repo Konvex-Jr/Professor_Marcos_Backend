@@ -26,6 +26,8 @@ export default class CreatePost {
 
         const post = new Post(description, post_string, new Date(), new Date())
 
+        this.postRepository.create(post)
+
         return {
             post
         }
