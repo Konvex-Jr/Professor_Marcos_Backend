@@ -2,3 +2,5 @@ node_modules
 public.key
 private.key
 package-lock.json
+
+.env
