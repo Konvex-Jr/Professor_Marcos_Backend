@@ -1,30 +1,35 @@
 import FindUserById from "../source/useCases/findUserById/FindUserById";
 
 describe("FindUserById UseCase", () => {
-  const mockRepositoryFactory = {
-    createUserRepository: () => ({
-      findById: jest.fn()
-    })
-  };
+  let findUserById: FindUserById;
+  let mockRepositoryFactory: any;
+  let mockFindById: jest.Mock;
 
-  it("deve encontrar um usuário pelo ID", async () => {
+  beforeEach(() => {
+    mockFindById = jest.fn();
+    mockRepositoryFactory = {
+      createUserRepository: () => ({
+        findById: mockFindById
+      })
+    };
+    findUserById = new FindUserById(mockRepositoryFactory);
+  });
+
+  test("deve encontrar um usuário pelo ID", async () => {
     const userMock = { id: "1", name: "John Doe", email: "john.doe@example.com", password: "senha123" };
-    const useCase = new FindUserById(mockRepositoryFactory as any);
-    (useCase.userRepository.findById as jest.Mock).mockResolvedValue(userMock);
-    const result = await useCase.execute({ userId: "1" });
+    mockFindById.mockResolvedValue(userMock);
+    const result = await findUserById.execute({ userId: "1" });
     expect(result.user).toBeDefined();
     expect(result.user.id).toBe(userMock.id);
     expect(result.user.email).toBe(userMock.email);
   });
 
-  it("deve lançar erro quando o userId não for fornecido", async () => {
-    const useCase = new FindUserById(mockRepositoryFactory as any);
-    await expect(useCase.execute({ userId: "" } as any)).rejects.toThrow("Id do usuário não fornecido");
+  test("deve lançar erro quando o userId não for fornecido", async () => {
+    await expect(findUserById.execute({ userId: "" } as any)).rejects.toThrow("Id do usuário não fornecido");
   });
 
-  it("deve lançar erro quando o usuário não for encontrado", async () => {
-    const useCase = new FindUserById(mockRepositoryFactory as any);
-    (useCase.userRepository.findById as jest.Mock).mockResolvedValue(null);
-    await expect(useCase.execute({ userId: "1" })).rejects.toThrow("Usuário não encontrado");
+  test("deve lançar erro quando o usuário não for encontrado", async () => {
+    mockFindById.mockResolvedValue(null);
+    await expect(findUserById.execute({ userId: "1" })).rejects.toThrow("Usuário não encontrado");
   });
 });
