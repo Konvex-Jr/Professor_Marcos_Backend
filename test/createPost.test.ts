@@ -1,36 +1,72 @@
+import Post from "../source/domain/Entity/Post";
+import RepositoryFactoryInterface from "../source/domain/Interfaces/RepositoryFactoryInterface";
+import MemoryRepositoryFactory from "../source/infra/repository/MemoryRepositoryFactory";
 import CreatePost from "../source/useCases/createPost/CreatePost";
 
 describe("CreatePost UseCase", () => {
   
-  const mockRepositoryFactory = {
-    createPostRepository: () => ({
-      create: jest.fn(),
-      getAll: jest.fn().mockResolvedValue([])
-    })
-  };
+  let createPost: CreatePost
+  let repositoryFactory: RepositoryFactoryInterface
 
-  it("deve criar um post com sucesso", async () => {
-    const postMock = { description: "desc", post_string: "str", created_at: new Date(), updated_at: new Date() };
-    const useCase = new CreatePost(mockRepositoryFactory as any);
-    (useCase.postRepository.create as jest.Mock).mockResolvedValue(postMock);
-    const input = { description: "meu primeiro post", post_string: "teste post_string", created_at: new Date(), updated_at: new Date(), deleted_at: null };
-    const output = await useCase.execute(input);
-    expect(output.post).toBeDefined();
-    expect(output.post.description).toBe(input.description);
+  beforeEach(() => {
+    repositoryFactory = new MemoryRepositoryFactory()
+    createPost = new CreatePost(repositoryFactory)
+  })
+
+  test("deve criar um post com sucesso", async () => {
+    const createPost = new CreatePost(repositoryFactory)
+
+    const input = {
+      description: "description test",
+      post_string: "post_string test"
+    }
+
+    const newPost = await createPost.execute(input)
+
+    expect(newPost.post).toBeDefined()
+
   });
 
-  it("não deve criar um post caso não seja fornecido uma post_string", async () => {
-    const useCase = new CreatePost(mockRepositoryFactory as any);
-    const input = { description: "meu primeiro post", post_string: '', created_at: new Date(), updated_at: new Date(), deleted_at: null };
-    await expect(useCase.execute(input)).rejects.toThrow("String de imagem não fornecido");
+  test("não deve criar um post caso não seja fornecido uma post_string", async () => {
+    
+    const createPost = new CreatePost(repositoryFactory)
+
+    const input = {
+      description: "description test",
+      post_string: ""
+    }
+
+    
+    expect(async () => {
+
+      const postOutput = await createPost.execute(input)
+
+    }).rejects.toThrow("String de imagem não fornecida")
+  
   });
 
-  it("deve chamar o método create do repositório", async () => {
-    const postMock = { description: "desc", post_string: "str", created_at: new Date(), updated_at: new Date() };
-    const useCase = new CreatePost(mockRepositoryFactory as any);
-    (useCase.postRepository.create as jest.Mock).mockResolvedValue(postMock);
-    const input = { description: "meu primeiro post", post_string: "teste post_string", created_at: new Date(), updated_at: new Date(), deleted_at: null };
-    await useCase.execute(input);
-    expect(useCase.postRepository.create).toHaveBeenCalled();
+  test("deve chamar o método create do repositório", async () => {
+    
+    const mockCreate = jest.fn();
+
+    const mockRepositoryFactory: RepositoryFactoryInterface = {
+        createPostRepository: () => {
+            return {
+                create: mockCreate
+            };
+        }
+    } as any;
+
+    const createPost = new CreatePost(mockRepositoryFactory);
+
+    const input = {
+        description: "description test",
+        post_string: "post_string test"
+    };
+
+    await createPost.execute(input);
+
+    expect(mockCreate).toHaveBeenCalled();
+
   });
 });

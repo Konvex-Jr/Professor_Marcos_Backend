@@ -1,6 +1,3 @@
-import { hash } from "bcrypt";
-import { sign } from "jsonwebtoken";
-import { readFileSync } from "fs";
 import CreatePostInput from "./CreatePostInput";
 import CreatePostOutput from "./CreatePostOutput";
 import RepositoryFactoryInterface from "../../domain/Interfaces/RepositoryFactoryInterface";
@@ -20,13 +17,13 @@ export default class CreatePost {
         const description = input.description
         const post_string = input.post_string
 
-        if(!post_string){
-            throw new Error("String de imagem não fornecido")
+        if(post_string.length === 0){
+            throw new Error("String de imagem não fornecida")
         }
 
         const post = new Post(description, post_string, new Date(), new Date())
 
-        this.postRepository.create(post)
+        await this.postRepository.create(post)
 
         return {
             post
