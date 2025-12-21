@@ -14,56 +14,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const CreateUser_1 = __importDefault(require("../source/useCases/createUser/CreateUser"));
 describe("CreateUser UseCase", () => {
-    const mockRepositoryFactory = {
-        createUserRepository: () => ({
-            create: jest.fn(),
-            getAll: jest.fn().mockResolvedValue([])
-        })
-    };
-    it("deve criar um usuário com sucesso", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new CreateUser_1.default(mockRepositoryFactory);
-        useCase.userRepository.create.mockResolvedValue({ id: "1", name: "John", email: "john.doe@konvex.com.br", password: "senha123" });
+    let createUser;
+    let mockRepositoryFactory;
+    let mockCreate;
+    beforeEach(() => {
+        mockCreate = jest.fn();
+        mockRepositoryFactory = {
+            createUserRepository: () => ({
+                create: mockCreate,
+                getAll: jest.fn().mockResolvedValue([])
+            })
+        };
+        createUser = new CreateUser_1.default(mockRepositoryFactory);
+    });
+    test("deve criar um usuário com sucesso", () => __awaiter(void 0, void 0, void 0, function* () {
+        mockCreate.mockResolvedValue({ id: "1", name: "John", email: "john.doe@konvex.com.br", password: "senha123" });
         const input = { name: "John", email: "john.doe@konvex.com.br", password: "senha123" };
-        const output = yield useCase.execute(input);
+        const output = yield createUser.execute(input);
         expect(output.accessToken).toBeDefined();
     }));
-    it("não deve criar usuário com senha inferior a seis caracteres", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new CreateUser_1.default(mockRepositoryFactory);
+    test("não deve criar usuário com senha inferior a seis caracteres", () => __awaiter(void 0, void 0, void 0, function* () {
         const input = { name: "John", email: "john.doe@konvex.com.br", password: "12345" };
-        yield expect(useCase.execute(input)).rejects.toThrow("Invalid password");
+        yield expect(createUser.execute(input)).rejects.toThrow("Invalid password");
     }));
-    it("deve chamar o método create do repositório", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new CreateUser_1.default(mockRepositoryFactory);
-        useCase.userRepository.create.mockResolvedValue({ id: "1", name: "John", email: "john.doe@konvex.com.br", password: "senha123" });
+    test("deve chamar o método create do repositório", () => __awaiter(void 0, void 0, void 0, function* () {
+        mockCreate.mockResolvedValue({ id: "1", name: "John", email: "john.doe@konvex.com.br", password: "senha123" });
         const input = { name: "John", email: "john.doe@konvex.com.br", password: "senha123" };
-        yield useCase.execute(input);
-        expect(useCase.userRepository.create).toHaveBeenCalled();
-    }));
-});
-describe("CreateUser UseCase", () => {
-    const mockRepositoryFactory = {
-        createUserRepository: () => ({
-            create: jest.fn(),
-            getAll: jest.fn().mockResolvedValue([])
-        })
-    };
-    it("deve criar um usuário com sucesso", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new CreateUser_1.default(mockRepositoryFactory);
-        useCase.userRepository.create.mockResolvedValue({ id: "1", name: "John", email: "john.doe@konvex.com.br", password: "senha123" });
-        const input = { name: "John", email: "john.doe@konvex.com.br", password: "senha123" };
-        const output = yield useCase.execute(input);
-        expect(output.accessToken).toBeDefined();
-    }));
-    it("não deve criar usuário com senha inferior a seis caracteres", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new CreateUser_1.default(mockRepositoryFactory);
-        const input = { name: "John", email: "john.doe@konvex.com.br", password: "12345" };
-        yield expect(useCase.execute(input)).rejects.toThrow("Invalid password");
-    }));
-    it("deve chamar o método create do repositório", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new CreateUser_1.default(mockRepositoryFactory);
-        useCase.userRepository.create.mockResolvedValue({ id: "1", name: "John", email: "john.doe@konvex.com.br", password: "senha123" });
-        const input = { name: "John", email: "john.doe@konvex.com.br", password: "senha123" };
-        yield useCase.execute(input);
-        expect(useCase.userRepository.create).toHaveBeenCalled();
+        yield createUser.execute(input);
+        expect(mockCreate).toHaveBeenCalled();
     }));
 });

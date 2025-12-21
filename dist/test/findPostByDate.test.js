@@ -14,27 +14,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const FindPostByDate_1 = __importDefault(require("../source/useCases/findPostByDate/FindPostByDate"));
 describe("FindPostByDate UseCase", () => {
-    const mockRepositoryFactory = {
-        createPostRepository: () => ({
-            findByDate: jest.fn()
-        })
-    };
-    it("deve retornar um post quando a data existe", () => __awaiter(void 0, void 0, void 0, function* () {
+    let findPostByDate;
+    let mockRepositoryFactory;
+    let mockFindByDate;
+    beforeEach(() => {
+        mockFindByDate = jest.fn();
+        mockRepositoryFactory = {
+            createPostRepository: () => ({
+                findByDate: mockFindByDate
+            })
+        };
+        findPostByDate = new FindPostByDate_1.default(mockRepositoryFactory);
+    });
+    test("deve retornar um post quando a data existe", () => __awaiter(void 0, void 0, void 0, function* () {
         const postMock = { description: "desc", post_string: "str", created_at: new Date(), updated_at: new Date() };
-        const useCase = new FindPostByDate_1.default(mockRepositoryFactory);
-        useCase.postRepository.findByDate.mockResolvedValue(postMock);
+        mockFindByDate.mockResolvedValue(postMock);
         const input = { created_at: postMock.created_at };
-        const result = yield useCase.execute(input);
+        const result = yield findPostByDate.execute(input);
         expect(result.post).toBeDefined();
         expect(result.post.description).toBe(postMock.description);
     }));
-    it("deve lançar erro se data não for fornecida", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new FindPostByDate_1.default(mockRepositoryFactory);
-        yield expect(useCase.execute({})).rejects.toThrow("Data não fornecida");
+    test("deve lançar erro se data não for fornecida", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield expect(findPostByDate.execute({})).rejects.toThrow("Data não fornecida");
     }));
-    it("deve lançar erro se post não encontrado", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new FindPostByDate_1.default(mockRepositoryFactory);
-        useCase.postRepository.findByDate.mockResolvedValue(null);
-        yield expect(useCase.execute({ created_at: new Date() })).rejects.toThrow("Post não encontrado");
+    test("deve lançar erro se post não encontrado", () => __awaiter(void 0, void 0, void 0, function* () {
+        mockFindByDate.mockResolvedValue(null);
+        yield expect(findPostByDate.execute({ created_at: new Date() })).rejects.toThrow("Post não encontrado");
     }));
 });

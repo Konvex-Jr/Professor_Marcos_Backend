@@ -14,27 +14,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const FindUserById_1 = __importDefault(require("../source/useCases/findUserById/FindUserById"));
 describe("FindUserById UseCase", () => {
-    const mockRepositoryFactory = {
-        createUserRepository: () => ({
-            findById: jest.fn()
-        })
-    };
-    it("deve encontrar um usuário pelo ID", () => __awaiter(void 0, void 0, void 0, function* () {
+    let findUserById;
+    let mockRepositoryFactory;
+    let mockFindById;
+    beforeEach(() => {
+        mockFindById = jest.fn();
+        mockRepositoryFactory = {
+            createUserRepository: () => ({
+                findById: mockFindById
+            })
+        };
+        findUserById = new FindUserById_1.default(mockRepositoryFactory);
+    });
+    test("deve encontrar um usuário pelo ID", () => __awaiter(void 0, void 0, void 0, function* () {
         const userMock = { id: "1", name: "John Doe", email: "john.doe@example.com", password: "senha123" };
-        const useCase = new FindUserById_1.default(mockRepositoryFactory);
-        useCase.userRepository.findById.mockResolvedValue(userMock);
-        const result = yield useCase.execute({ userId: "1" });
+        mockFindById.mockResolvedValue(userMock);
+        const result = yield findUserById.execute({ userId: "1" });
         expect(result.user).toBeDefined();
         expect(result.user.id).toBe(userMock.id);
         expect(result.user.email).toBe(userMock.email);
     }));
-    it("deve lançar erro quando o userId não for fornecido", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new FindUserById_1.default(mockRepositoryFactory);
-        yield expect(useCase.execute({ userId: "" })).rejects.toThrow("Id do usuário não fornecido");
+    test("deve lançar erro quando o userId não for fornecido", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield expect(findUserById.execute({ userId: "" })).rejects.toThrow("Id do usuário não fornecido");
     }));
-    it("deve lançar erro quando o usuário não for encontrado", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new FindUserById_1.default(mockRepositoryFactory);
-        useCase.userRepository.findById.mockResolvedValue(null);
-        yield expect(useCase.execute({ userId: "1" })).rejects.toThrow("Usuário não encontrado");
+    test("deve lançar erro quando o usuário não for encontrado", () => __awaiter(void 0, void 0, void 0, function* () {
+        mockFindById.mockResolvedValue(null);
+        yield expect(findUserById.execute({ userId: "1" })).rejects.toThrow("Usuário não encontrado");
     }));
 });

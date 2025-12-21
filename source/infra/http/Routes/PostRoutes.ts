@@ -12,7 +12,8 @@ export default class PostRoutes implements ModelRoutes {
     }
 
     init(): void {
-        this.http.route("post", "/api/posts", true, async (params: any, body: any) => {
+        
+        this.http.route("post", "/api/posts", false, async (params: any, body: any) => {
             return await this.postController.create(body);
         });
 

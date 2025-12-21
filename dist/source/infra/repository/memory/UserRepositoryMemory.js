@@ -17,7 +17,7 @@ class UserRepositoryMemory {
         return __awaiter(this, void 0, void 0, function* () {
             const exists = this.users.find(existentUser => existentUser.email === user.email);
             if (exists)
-                throw new Error("Email already exists");
+                throw new Error("Email já existe");
             this.users.push(user);
             return user;
         });

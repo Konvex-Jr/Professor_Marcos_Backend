@@ -19,7 +19,7 @@ class PostRoutes {
         this.postController = new PostController_1.default(repositoryFactory);
     }
     init() {
-        this.http.route("post", "/api/posts", true, (params, body) => __awaiter(this, void 0, void 0, function* () {
+        this.http.route("post", "/api/posts", false, (params, body) => __awaiter(this, void 0, void 0, function* () {
             return yield this.postController.create(body);
         }));
         this.http.route("get", "/api/posts", false, () => __awaiter(this, void 0, void 0, function* () {

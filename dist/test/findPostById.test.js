@@ -14,27 +14,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const FindPostById_1 = __importDefault(require("../source/useCases/findPostById/FindPostById"));
 describe("FindPostById UseCase", () => {
-    const mockRepositoryFactory = {
-        createPostRepository: () => ({
-            findById: jest.fn()
-        })
-    };
-    it("deve retornar um post quando o ID existe", () => __awaiter(void 0, void 0, void 0, function* () {
+    let findPostById;
+    let mockRepositoryFactory;
+    let mockFindById;
+    beforeEach(() => {
+        mockFindById = jest.fn();
+        mockRepositoryFactory = {
+            createPostRepository: () => ({
+                findById: mockFindById
+            })
+        };
+        findPostById = new FindPostById_1.default(mockRepositoryFactory);
+    });
+    test("deve retornar um post quando o ID existe", () => __awaiter(void 0, void 0, void 0, function* () {
         const postMock = { description: "desc", post_string: "str", created_at: new Date(), updated_at: new Date() };
-        const useCase = new FindPostById_1.default(mockRepositoryFactory);
-        useCase.postRepository.findById.mockResolvedValue(postMock);
+        mockFindById.mockResolvedValue(postMock);
         const input = { post_id: "1" };
-        const result = yield useCase.execute(input);
+        const result = yield findPostById.execute(input);
         expect(result.post).toBeDefined();
         expect(result.post.description).toBe(postMock.description);
     }));
-    it("deve lançar erro se ID não for fornecido", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new FindPostById_1.default(mockRepositoryFactory);
-        yield expect(useCase.execute({})).rejects.toThrow("ID do post não fornecido");
+    test("deve lançar erro se ID não for fornecido", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield expect(findPostById.execute({})).rejects.toThrow("ID do post não fornecido");
     }));
-    it("deve lançar erro se post não encontrado", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new FindPostById_1.default(mockRepositoryFactory);
-        useCase.postRepository.findById.mockResolvedValue(null);
-        yield expect(useCase.execute({ post_id: "1" })).rejects.toThrow("Post não encontrado");
+    test("deve lançar erro se post não encontrado", () => __awaiter(void 0, void 0, void 0, function* () {
+        mockFindById.mockResolvedValue(null);
+        yield expect(findPostById.execute({ post_id: "1" })).rejects.toThrow("Post não encontrado");
     }));
 });

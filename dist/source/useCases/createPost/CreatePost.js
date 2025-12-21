@@ -21,10 +21,11 @@ class CreatePost {
         return __awaiter(this, void 0, void 0, function* () {
             const description = input.description;
             const post_string = input.post_string;
-            if (!post_string) {
-                throw new Error("String de imagem não fornecido");
+            if (post_string.length === 0) {
+                throw new Error("String de imagem não fornecida");
             }
             const post = new Post_1.default(description, post_string, new Date(), new Date());
+            yield this.postRepository.create(post);
             return {
                 post
             };

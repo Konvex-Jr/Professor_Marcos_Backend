@@ -14,40 +14,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const GetAllPosts_1 = __importDefault(require("../source/useCases/getAllPosts/GetAllPosts"));
 describe("GetAllPosts UseCase", () => {
-    const mockRepositoryFactory = {
-        createPostRepository: () => ({
-            getAll: jest.fn()
-        })
-    };
-    it("deve retornar todos os posts", () => __awaiter(void 0, void 0, void 0, function* () {
+    let getAllPosts;
+    let mockRepositoryFactory;
+    let mockGetAll;
+    beforeEach(() => {
+        mockGetAll = jest.fn();
+        mockRepositoryFactory = {
+            createPostRepository: () => ({
+                getAll: mockGetAll
+            })
+        };
+        getAllPosts = new GetAllPosts_1.default(mockRepositoryFactory);
+    });
+    test("deve retornar todos os posts", () => __awaiter(void 0, void 0, void 0, function* () {
         const postsMock = [{ description: "desc", post_string: "str", created_at: new Date(), updated_at: new Date() }];
-        const useCase = new GetAllPosts_1.default(mockRepositoryFactory);
-        useCase.postRepository.getAll.mockResolvedValue(postsMock);
-        const result = yield useCase.execute();
+        mockGetAll.mockResolvedValue(postsMock);
+        const result = yield getAllPosts.execute();
         expect(result.data).toBeDefined();
         expect(result.data.length).toBe(1);
     }));
-    it("deve lançar erro se não houver posts", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new GetAllPosts_1.default(mockRepositoryFactory);
-        useCase.postRepository.getAll.mockResolvedValue(null);
-        yield expect(useCase.execute()).rejects.toThrow("Nenhum post cadastrado ou erro na requisição");
+    test("deve lançar erro se não houver posts", () => __awaiter(void 0, void 0, void 0, function* () {
+        mockGetAll.mockResolvedValue(null);
+        yield expect(getAllPosts.execute()).rejects.toThrow("Nenhum post cadastrado ou erro na requisição");
     }));
 });
-const mockRepositoryFactory = {
-    createPostRepository: () => ({
-        getAll: jest.fn()
-    })
-};
-it("deve retornar todos os posts", () => __awaiter(void 0, void 0, void 0, function* () {
-    const postsMock = [{ description: "desc", post_string: "str", created_at: new Date(), updated_at: new Date() }];
-    const useCase = new GetAllPosts_1.default(mockRepositoryFactory);
-    useCase.postRepository.getAll.mockResolvedValue(postsMock);
-    const result = yield useCase.execute();
-    expect(result.data).toBeDefined();
-    expect(result.data.length).toBe(1);
-}));
-it("deve lançar erro se não houver posts", () => __awaiter(void 0, void 0, void 0, function* () {
-    const useCase = new GetAllPosts_1.default(mockRepositoryFactory);
-    useCase.postRepository.getAll.mockResolvedValue(null);
-    yield expect(useCase.execute()).rejects.toThrow("Nenhum post cadastrado ou erro na requisição");
-}));

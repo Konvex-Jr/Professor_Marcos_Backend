@@ -12,32 +12,49 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const MemoryRepositoryFactory_1 = __importDefault(require("../source/infra/repository/MemoryRepositoryFactory"));
 const CreatePost_1 = __importDefault(require("../source/useCases/createPost/CreatePost"));
 describe("CreatePost UseCase", () => {
-    const mockRepositoryFactory = {
-        createPostRepository: () => ({
-            create: jest.fn(),
-            getAll: jest.fn().mockResolvedValue([])
-        })
-    };
-    it("deve criar um post com sucesso", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new CreatePost_1.default(mockRepositoryFactory);
-        useCase.postRepository.create.mockResolvedValue({ id: "1", description: "meu primeiro post", post_string: "teste post_string", created_at: new Date(), updated_at: new Date(), deleted_at: null });
-        const input = { description: "meu primeiro post", post_string: "teste post_string", created_at: new Date(), updated_at: new Date(), deleted_at: null };
-        const output = yield useCase.execute(input);
-        expect(output.post).toBeDefined();
-        expect(output.post.description).toBe(input.description);
+    let createPost;
+    let repositoryFactory;
+    beforeEach(() => {
+        repositoryFactory = new MemoryRepositoryFactory_1.default();
+        createPost = new CreatePost_1.default(repositoryFactory);
+    });
+    test("deve criar um post com sucesso", () => __awaiter(void 0, void 0, void 0, function* () {
+        const createPost = new CreatePost_1.default(repositoryFactory);
+        const input = {
+            description: "description test",
+            post_string: "post_string test"
+        };
+        const newPost = yield createPost.execute(input);
+        expect(newPost.post).toBeDefined();
     }));
-    it("não deve criar um post caso não seja fornecido uma post_string", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new CreatePost_1.default(mockRepositoryFactory);
-        const input = { description: "meu primeiro post", post_string: '', created_at: new Date(), updated_at: new Date(), deleted_at: null };
-        yield expect(useCase.execute(input)).rejects.toThrow("String de imagem não fornecido");
+    test("não deve criar um post caso não seja fornecido uma post_string", () => __awaiter(void 0, void 0, void 0, function* () {
+        const createPost = new CreatePost_1.default(repositoryFactory);
+        const input = {
+            description: "description test",
+            post_string: ""
+        };
+        expect(() => __awaiter(void 0, void 0, void 0, function* () {
+            const postOutput = yield createPost.execute(input);
+        })).rejects.toThrow("String de imagem não fornecida");
     }));
-    it("deve chamar o método create do repositório", () => __awaiter(void 0, void 0, void 0, function* () {
-        const useCase = new CreatePost_1.default(mockRepositoryFactory);
-        useCase.postRepository.create.mockResolvedValue({ id: "1", description: "meu primeiro post", post_string: "teste post_string", created_at: new Date(), updated_at: new Date(), deleted_at: null });
-        const input = { description: "meu primeiro post", post_string: "teste post_string", created_at: new Date(), updated_at: new Date(), deleted_at: null };
-        yield useCase.execute(input);
-        expect(useCase.postRepository.create).toHaveBeenCalled();
+    test("deve chamar o método create do repositório", () => __awaiter(void 0, void 0, void 0, function* () {
+        const mockCreate = jest.fn();
+        const mockRepositoryFactory = {
+            createPostRepository: () => {
+                return {
+                    create: mockCreate
+                };
+            }
+        };
+        const createPost = new CreatePost_1.default(mockRepositoryFactory);
+        const input = {
+            description: "description test",
+            post_string: "post_string test"
+        };
+        yield createPost.execute(input);
+        expect(mockCreate).toHaveBeenCalled();
     }));
 });
