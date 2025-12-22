@@ -3,4 +3,5 @@ public.key
 private.key
 package-lock.json
 coverage/
+dist/
 .env
