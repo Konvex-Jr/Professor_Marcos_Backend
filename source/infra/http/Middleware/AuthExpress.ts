@@ -13,11 +13,13 @@ export default class ExpressAuth implements Auth {
     }
     
     async execute(request: any, response: any, next: any): Promise<any> {
+        
         if (!request.headers || !request.headers['access-token']) {
             return response.status(403).json({
                 message: 'Token is required'
             });
         }
+
         const token = request.headers['access-token'];
         
         try {

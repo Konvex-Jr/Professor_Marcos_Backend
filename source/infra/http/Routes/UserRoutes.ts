@@ -12,19 +12,24 @@ export default class UserRoutes implements ModelRoutes {
     }
 
     init(): void {
+
+        // CREATE USER
         this.http.route("post", "/api/auth/register", false, async (params: any, body: any) => {
 			return await this.userController.createUser(body);
 		});
 
+        // LOGIN LOGIN
         this.http.route("post", "/api/auth/login", false, async (params: any, body: any) => {
             return this.userController.login(body);
         });
-
-        this.http.route("get", "/api/user/", true, async () => {
+    
+        // GET USERS
+        this.http.route("get", "/api/users", false, async () => {
             return this.userController.getAll();
         })
 
-        this.http.route("post", "/api/user/find", true, async (params: any, body: any) => {
+        // GET USER BY ID
+        this.http.route("post", "/api/users/:id", true, async (params: any, body: any) => {
             return this.userController.findById(body);
         })
     }

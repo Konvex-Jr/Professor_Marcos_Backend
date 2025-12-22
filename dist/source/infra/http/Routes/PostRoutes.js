@@ -19,14 +19,29 @@ class PostRoutes {
         this.postController = new PostController_1.default(repositoryFactory);
     }
     init() {
-        this.http.route("post", "/api/posts", false, (params, body) => __awaiter(this, void 0, void 0, function* () {
+        // CREATE POST
+        this.http.route("post", "/api/posts", true, (params, body) => __awaiter(this, void 0, void 0, function* () {
             return yield this.postController.create(body);
         }));
+        // GET POSTS
         this.http.route("get", "/api/posts", false, () => __awaiter(this, void 0, void 0, function* () {
             return this.postController.getAll();
         }));
-        this.http.route("post", "/api/users", false, (params, body) => __awaiter(this, void 0, void 0, function* () {
-            return this.postController.findById(body);
+        // GET POSTS BY ID
+        this.http.route("get", "/api/posts/:id", true, (params, body) => __awaiter(this, void 0, void 0, function* () {
+            return this.postController.findById(params);
+        }));
+        // GET POST BY DATE
+        this.http.route("get", "/api/posts", true, (params, body) => __awaiter(this, void 0, void 0, function* () {
+            return this.postController.findByDate(body);
+        }));
+        // UPDATE POST
+        this.http.route("put", "/api/posts/:id", true, (params, body) => __awaiter(this, void 0, void 0, function* () {
+            return this.postController.update(body);
+        }));
+        // DELETE POST
+        this.http.route("delete", "/api/posts/:id", false, (params, body) => __awaiter(this, void 0, void 0, function* () {
+            return this.postController.delete(params);
         }));
     }
 }

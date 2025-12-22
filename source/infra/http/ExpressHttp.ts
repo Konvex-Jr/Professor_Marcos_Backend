@@ -11,6 +11,7 @@ export default class ExpressHttp implements Http {
 	constructor (auth: Auth) {
 		this.app = express();
 		this.app.use(express.json());
+		
 		// @ts-ignore
 		this.app.all('*', function (req, res, next) {
 			res.header('Access-Control-Allow-Origin', '*');
@@ -18,10 +19,12 @@ export default class ExpressHttp implements Http {
 			res.header('Access-Control-Allow-Headers', 'Content-Type, access-token');
 			next();
 		});
+		
 		// @ts-ignore
 		this.app.options('*', function (req, res, next) {
 			res.end();
 		});
+		
 		this.auth = auth
 	}
 

@@ -21,7 +21,7 @@ export default class CreatePost {
             throw new Error("String de imagem não fornecida")
         }
 
-        const post = new Post(description, post_string, new Date(), new Date())
+        const post = new Post(description, post_string, new Date(), new Date(), null)
 
         await this.postRepository.create(post)
 

@@ -24,7 +24,7 @@ class FindPostByDate {
             const response = yield this.postRepository.findByDate(input.created_at);
             if (!response)
                 throw new Error("Post não encontrado");
-            const post = new Post_1.default(response.description, response.post_string, response.created_at, response.updated_at);
+            const post = new Post_1.default(response.description, response.post_string, response.created_at, response.updated_at, response.deleted_at);
             return {
                 post
             };

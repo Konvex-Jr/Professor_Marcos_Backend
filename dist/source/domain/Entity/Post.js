@@ -7,8 +7,9 @@ const uuid_1 = require("uuid");
 // Descrição
 // Data Criação
 // Data Edição
+// Data Exclusão
 class Post {
-    constructor(description, post_string, created_at, updated_at, id) {
+    constructor(description, post_string, created_at, updated_at, deleted_at, id) {
         if (!id)
             id = (0, uuid_1.v4)();
         this.id = id;
@@ -16,7 +17,7 @@ class Post {
         this.post_string = post_string;
         this.created_at = created_at;
         this.updated_at = updated_at;
-        this.deleted_at = null;
+        this.deleted_at = deleted_at;
     }
 }
 exports.default = Post;

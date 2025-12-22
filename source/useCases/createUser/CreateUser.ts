@@ -25,10 +25,12 @@ export default class CreateUser {
             userId: user.id,
             userEmail: user.email
         }
+        
         const accessToken = sign(payload, privateKey, {
             algorithm: "RS256",
             expiresIn: "24h"
         });
+
         return {
             accessToken
         }

@@ -17,6 +17,7 @@ const FindPostById_1 = __importDefault(require("../../useCases/findPostById/Find
 const FindPostByDate_1 = __importDefault(require("../../useCases/findPostByDate/FindPostByDate"));
 const GetAllPosts_1 = __importDefault(require("../../useCases/getAllPosts/GetAllPosts"));
 const UpdatePost_1 = __importDefault(require("../../useCases/updatePost/UpdatePost"));
+const DeletePost_1 = __importDefault(require("../../useCases/deletePost/DeletePost"));
 class PostController {
     constructor(repositoryFactory) {
         this.repositoryFactory = repositoryFactory;
@@ -49,6 +50,12 @@ class PostController {
         return __awaiter(this, void 0, void 0, function* () {
             const updatePost = new UpdatePost_1.default(this.repositoryFactory);
             return yield updatePost.execute(input);
+        });
+    }
+    delete(input) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const deletePost = new DeletePost_1.default(this.repositoryFactory);
+            return yield deletePost.execute(input);
         });
     }
 }

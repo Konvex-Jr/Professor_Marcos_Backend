@@ -8,7 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const Post_1 = __importDefault(require("../../../domain/Entity/Post"));
 class PostRepositoryMemory {
     constructor() {
         this.posts = [];
@@ -50,6 +54,16 @@ class PostRepositoryMemory {
                 throw new Error("Post não encontrado");
             this.posts[index] = post;
             return post;
+        });
+    }
+    delete(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const index = this.posts.findIndex(existingPost => existingPost.id === id);
+            if (index === -1)
+                throw new Error("Post não encontrado");
+            const deletedPost = this.posts[index];
+            this.posts[index] = new Post_1.default(deletedPost.description, deletedPost.post_string, deletedPost.created_at, deletedPost.updated_at, new Date());
+            return "Post deletado com sucesso";
         });
     }
 }

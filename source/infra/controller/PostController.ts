@@ -14,6 +14,9 @@ import PostRepositoryInterface from "../../domain/Interfaces/PostRepositoryInter
 import UpdatePostInput from "../../useCases/updatePost/UpdatePostInput";
 import UpdatePostOutput from "../../useCases/updatePost/UpdatePostOutput";
 import UpdatePost from "../../useCases/updatePost/UpdatePost";
+import DeletePostInput from "../../useCases/deletePost/DeletePostInput";
+import DeletePostOutput from "../../useCases/deletePost/DeletePostOutput";
+import DeletePost from "../../useCases/deletePost/DeletePost";
 
 export default class PostController {
 
@@ -43,6 +46,11 @@ export default class PostController {
     async update(input: UpdatePostInput): Promise<UpdatePostOutput> {
         const updatePost = new UpdatePost(this.repositoryFactory)
         return await updatePost.execute(input)
+    }
+
+    async delete(input: DeletePostInput): Promise<DeletePostOutput> {
+        const deletePost = new DeletePost(this.repositoryFactory)
+        return await deletePost.execute(input)
     }
 
 }

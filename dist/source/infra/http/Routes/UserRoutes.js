@@ -19,16 +19,20 @@ class UserRoutes {
         this.userController = new UserController_1.default(repositoryFactory);
     }
     init() {
+        // CREATE USER
         this.http.route("post", "/api/auth/register", false, (params, body) => __awaiter(this, void 0, void 0, function* () {
             return yield this.userController.createUser(body);
         }));
+        // LOGIN LOGIN
         this.http.route("post", "/api/auth/login", false, (params, body) => __awaiter(this, void 0, void 0, function* () {
             return this.userController.login(body);
         }));
-        this.http.route("get", "/api/user/", true, () => __awaiter(this, void 0, void 0, function* () {
+        // GET USERS
+        this.http.route("get", "/api/users", false, () => __awaiter(this, void 0, void 0, function* () {
             return this.userController.getAll();
         }));
-        this.http.route("post", "/api/user/find", true, (params, body) => __awaiter(this, void 0, void 0, function* () {
+        // GET USER BY ID
+        this.http.route("post", "/api/users/:id", true, (params, body) => __awaiter(this, void 0, void 0, function* () {
             return this.userController.findById(body);
         }));
     }

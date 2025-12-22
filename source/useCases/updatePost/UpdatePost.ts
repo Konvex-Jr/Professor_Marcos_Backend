@@ -33,7 +33,7 @@ export default class UpdatePost {
         const post_string = input.post.post_string
         const created_at = response.created_at
 
-        const post = new Post(description, post_string, created_at, new Date())
+        const post = new Post(description, post_string, created_at, new Date(), null)
 
         return {
             post

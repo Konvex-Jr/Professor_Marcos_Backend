@@ -24,7 +24,7 @@ class CreatePost {
             if (post_string.length === 0) {
                 throw new Error("String de imagem não fornecida");
             }
-            const post = new Post_1.default(description, post_string, new Date(), new Date());
+            const post = new Post_1.default(description, post_string, new Date(), new Date(), null);
             yield this.postRepository.create(post);
             return {
                 post

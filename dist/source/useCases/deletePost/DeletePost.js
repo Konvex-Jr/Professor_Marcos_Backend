@@ -8,33 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const Post_1 = __importDefault(require("../../domain/Entity/Post"));
-class UpdatePost {
+class DeletePost {
     constructor(repositoryFactory) {
         this.postRepository = repositoryFactory.createPostRepository();
     }
     execute(input) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!input) {
-                throw new Error("Post não fornecido");
-            }
-            // Encontra o POST com base no ID
-            const response = yield this.postRepository.findById(input.post.id);
-            if (!response) {
+            const id = input.id;
+            if (!this.postRepository.findById(id))
                 throw new Error("Post não encontrado");
-            }
-            const description = input.post.description;
-            const post_string = input.post.post_string;
-            const created_at = response.created_at;
-            const post = new Post_1.default(description, post_string, created_at, new Date(), null);
+            const post = yield this.postRepository.delete(id);
             return {
-                post
+                message: "Post deletado com sucesso"
             };
         });
     }
 }
-exports.default = UpdatePost;
+exports.default = DeletePost;
