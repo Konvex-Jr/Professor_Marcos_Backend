@@ -4,3 +4,5 @@ private.key
 package-lock.json
 
 .env
+
+todo.md
