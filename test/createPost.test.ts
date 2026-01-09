@@ -1,5 +1,6 @@
 import Post from "../source/domain/Entity/Post";
 import RepositoryFactoryInterface from "../source/domain/Interfaces/RepositoryFactoryInterface";
+import PostRepositoryDatabase from "../source/infra/repository/database/PostRepositoryDatabase";
 import MemoryRepositoryFactory from "../source/infra/repository/MemoryRepositoryFactory";
 import CreatePost from "../source/useCases/createPost/CreatePost";
 
@@ -14,7 +15,6 @@ describe("CreatePost UseCase", () => {
   })
 
   test("deve criar um post com sucesso", async () => {
-    const createPost = new CreatePost(repositoryFactory)
 
     const input = {
       description: "description test",
@@ -29,13 +29,10 @@ describe("CreatePost UseCase", () => {
 
   test("não deve criar um post caso não seja fornecido uma post_string", async () => {
     
-    const createPost = new CreatePost(repositoryFactory)
-
     const input = {
       description: "description test",
       post_string: ""
     }
-
     
     expect(async () => {
 
@@ -47,26 +44,16 @@ describe("CreatePost UseCase", () => {
 
   test("deve chamar o método create do repositório", async () => {
     
-    const mockCreate = jest.fn();
-
-    const mockRepositoryFactory: RepositoryFactoryInterface = {
-        createPostRepository: () => {
-            return {
-                create: mockCreate
-            };
-        }
-    } as any;
-
-    const createPost = new CreatePost(mockRepositoryFactory);
-
     const input = {
         description: "description test",
         post_string: "post_string test"
     };
 
-    await createPost.execute(input);
+    const output = await createPost.execute(input);
 
-    expect(mockCreate).toHaveBeenCalled();
+    expect(output).toBeDefined()
+    expect(output.post.description).toEqual("post_string test")
+    expect(output.post.post_string).toEqual("post_string test")
 
   });
 });
