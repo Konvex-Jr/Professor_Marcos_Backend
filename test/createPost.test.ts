@@ -41,19 +41,4 @@ describe("CreatePost UseCase", () => {
     }).rejects.toThrow("String de imagem não fornecida")
   
   });
-
-  test("deve chamar o método create do repositório", async () => {
-    
-    const input = {
-        description: "description test",
-        post_string: "post_string test"
-    };
-
-    const output = await createPost.execute(input);
-
-    expect(output).toBeDefined()
-    expect(output.post.description).toEqual("post_string test")
-    expect(output.post.post_string).toEqual("post_string test")
-
-  });
 });

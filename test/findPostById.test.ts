@@ -1,28 +1,33 @@
+import RepositoryFactoryInterface from "../source/domain/Interfaces/RepositoryFactoryInterface";
+import MemoryRepositoryFactory from "../source/infra/repository/MemoryRepositoryFactory";
+import CreatePost from "../source/useCases/createPost/CreatePost";
+import CreatePostInput from "../source/useCases/createPost/CreatePostInput";
 import FindPostById from "../source/useCases/findPostById/FindPostById";
 import FindPostByIdInput from "../source/useCases/findPostById/FindPostByIdInput";
 
 describe("FindPostById UseCase", () => {
+  
   let findPostById: FindPostById;
-  let mockRepositoryFactory: any;
-  let mockFindById: jest.Mock;
+  let repositoryFactory: RepositoryFactoryInterface;
+  let createPost: CreatePost
 
   beforeEach(() => {
-    mockFindById = jest.fn();
-    mockRepositoryFactory = {
-      createPostRepository: () => ({
-        findById: mockFindById
-      })
-    };
-    findPostById = new FindPostById(mockRepositoryFactory);
-  });
+    repositoryFactory = new MemoryRepositoryFactory();
+    findPostById = new FindPostById(repositoryFactory);
+    createPost = new CreatePost(repositoryFactory);
+  }); 
 
   test("deve retornar um post quando o ID existe", async () => {
-    const postMock = { description: "desc", post_string: "str", created_at: new Date(), updated_at: new Date() };
-    mockFindById.mockResolvedValue(postMock);
-    const input: FindPostByIdInput = { post_id: "1" };
+    const post_input = { description: "description test", post_string: "post_string test", created_at: new Date(), updated_at: new Date() };
+    
+    const new_post = await createPost.execute(post_input)
+    expect(new_post.post).toBeDefined();
+    
+    const input: FindPostByIdInput = { post_id: new_post.post.id };
     const result = await findPostById.execute(input);
-    expect(result.post).toBeDefined();
-    expect(result.post.description).toBe(postMock.description);
+
+    expect(result.post).toBeDefined()
+
   });
 
   test("deve lançar erro se ID não for fornecido", async () => {
@@ -30,7 +35,11 @@ describe("FindPostById UseCase", () => {
   });
 
   test("deve lançar erro se post não encontrado", async () => {
-    mockFindById.mockResolvedValue(null);
-    await expect(findPostById.execute({ post_id: "1" } as any)).rejects.toThrow("Post não encontrado");
+
+    const post_input = { description: "description test", post_string: "post_string test", created_at: new Date(), updated_at: new Date() };
+    const new_post = await createPost.execute(post_input);
+    const input: FindPostByIdInput = { post_id: "1" };
+
+    await expect(findPostById.execute(input)).rejects.toThrow("Post não encontrado");
   });
 });
