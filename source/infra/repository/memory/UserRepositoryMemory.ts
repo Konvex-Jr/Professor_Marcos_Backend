@@ -9,8 +9,8 @@ export default class UserRepositoryMemory implements UserRepositoryInterface {
         this.users = [];
     }
     
-    async create(user: User): Promise<User> {
-        const exists = this.users.find(existentUser => existentUser.email === user.email);
+    async create(user: User): Promise<User> { 
+        const exists = this.users.find(existentUser => existentUser.email === user.email) || null;
         if (exists) throw new Error("Email já existe");
         this.users.push(user);
         return user;

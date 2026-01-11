@@ -10,16 +10,16 @@ export default class PostRepositoryMemory implements PostRepositoryInterface {
     }
     
     async create(post: Post): Promise<Post> {
-        const exists = this.posts.find(existentPost => existentPost.id === post.id);
-        if (exists) throw new Error("Post já existe");
+        // const exists = this.posts.find(existentPost => existentPost.id === post.id);
+        // if (exists) throw new Error("Post já existe");
         this.posts.push(post);
         return post;
     }
 
     async findById(id: string): Promise<Post | null> {
         const post = this.posts.find(post => post.id === id);
-        if (!post) throw new Error("Post não encontrado");
-        return post;
+        // if (!post) throw new Error("Post não encontrado");
+        return post ?? null;
     }
     
     async findByDate(created_at: Date): Promise<Post> {

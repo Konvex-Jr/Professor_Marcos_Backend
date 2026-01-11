@@ -18,11 +18,11 @@ export default class LoginUser {
         
         const user = await this.userRepository.findByEmail(input.email);
         
-        if(!user) throw new Error("Invalid credentials");
+        if(!user) throw new Error("Usuário não encontrado");
         
         const isEqual = await compare(input.password, user.password);
 
-        if (!isEqual) throw new Error("Invalid credentials");
+        if (!isEqual) throw new Error("Usuário não encontrado");
         
         const privateKey = readFileSync('./private.key');
         

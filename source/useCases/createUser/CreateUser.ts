@@ -16,11 +16,16 @@ export default class CreateUser {
     }
 
     async execute(input: CreateUserInput): Promise<CreateUserOutput> {
+        
         if (input.password.length < 6) throw new Error("Invalid password");
+        
         const encryptPassword = await hash(input.password, 10);
-        const user = new User(input.email, encryptPassword);
+        const user = new User(input.email, encryptPassword, input?.id);
+        
         await this.userRepository.create(user);
+        
         const privateKey = readFileSync('./private.key');
+        
         const payload = {
             userId: user.id,
             userEmail: user.email

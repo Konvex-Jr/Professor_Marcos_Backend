@@ -41,8 +41,10 @@ describe("LoginUser use case", () => {
             email: "john.doe@gmail.com.br",
             password: "senha123",
         };
+        
         await createUser.execute(userInput);
-        await expect(
+        
+        expect(    
             loginUser.execute({ email: "jane.doe@gmail.com.br", password: "senhaErrada" })
         ).rejects.toThrow("Usuário não encontrado");
     });
