@@ -15,6 +15,7 @@ export default class FindPostByDate {
     async execute(input: FindPostByDateInput): Promise<FindPostByDateOutput> {
         
         if(!input.created_at) throw new Error("Data não fornecida")
+        
         const response = await this.postRepository.findByDate(input.created_at);
         
         if (!response) throw new Error("Post não encontrado")

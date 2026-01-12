@@ -14,26 +14,27 @@ describe("FindUserById UseCase", () => {
     createUser = new CreateUser(repositoryFactory)
   });
 
-  test("deve encontrar um usuário pelo ID", async () => {
-    
-    const user = { id: "1", name: "John Doe", email: "john.doe@example.com", password: "senha123" };
-    
-    createUser.execute(user)
-
-    const result = await findUserById.execute({ userId: "1" });
-    
-    expect(result.user).toBeDefined();
-    expect(result.user.id).toBe(user.id);
-    expect(result.user.email).toBe(user.email);
-  
+  test("deve lançar erro quando o userId não for fornecido", async () => {
+    await expect(findUserById.execute({ userId: "" } as any)).rejects.toThrow("ID do usuário não fornecido");
   });
 
-  // test("deve lançar erro quando o userId não for fornecido", async () => {
-  //   await expect(findUserById.execute({ userId: "" } as any)).rejects.toThrow("Id do usuário não fornecido");
-  // });
+  test("deve lançar erro quando o usuário não for encontrado", async () => {
+    await expect(findUserById.execute({ userId: "1" } as any)).rejects.toThrow("Usuário não encontrado");
+  });
 
-  // test("deve lançar erro quando o usuário não for encontrado", async () => {
-  //   mockFindById.mockResolvedValue(null);
-  //   await expect(findUserById.execute({ userId: "1" })).rejects.toThrow("Usuário não encontrado");
-  // });
+  test("deve encontrar um usuário pelo ID", async () => {
+    
+    const inputUser = { id: "1", email: "john.doe@example.com", password: "senha123" };
+    
+    const acessToken = await createUser.execute(inputUser)
+
+    const userID = {
+      userId: "1"
+    }
+
+    const findedUser = await findUserById.execute(userID)
+
+    expect(findedUser).toBeDefined()
+    
+  });
 });

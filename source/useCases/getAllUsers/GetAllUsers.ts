@@ -13,7 +13,8 @@ export default class GetAllUsers {
     async execute(): Promise<GetAllUsersOutput> {
         
         const response = await this.userRepository.getAll();
-        if(!response) throw new Error('Nenhum usuário cadastrado ou erro na requisição');
+        
+        if(!response.length) throw new Error('Não há usuários');
         
         return {
             data: response

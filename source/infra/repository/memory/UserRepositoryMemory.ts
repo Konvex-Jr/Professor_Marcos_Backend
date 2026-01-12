@@ -10,22 +10,18 @@ export default class UserRepositoryMemory implements UserRepositoryInterface {
     }
     
     async create(user: User): Promise<User> { 
-        const exists = this.users.find(existentUser => existentUser.email === user.email) || null;
-        if (exists) throw new Error("Email já existe");
         this.users.push(user);
         return user;
     }
 
     async findById(id: string): Promise<User | null> {
         const user = this.users.find(user => user.id === id);
-        if (!user) throw new Error("Usuário não encontrado");
-        return user;
+        return user ?? null;
     }
     
-    async findByEmail(email: string): Promise<User> {
+    async findByEmail(email: string): Promise<User | null> {
         const user = this.users.find(user => user.email === email);
-        if (!user) throw new Error("Usuário não encontrado");
-        return user;
+        return user ?? null;
     }
 
     async getAll(): Promise<User[]> {
@@ -34,7 +30,6 @@ export default class UserRepositoryMemory implements UserRepositoryInterface {
 
     async update(user: User): Promise<User> {
         const index = this.users.findIndex(existingUser => existingUser.id === user.id);
-        if (index === -1) throw new Error("Usuário não encontrado");
         this.users[index] = user;
         return user;
     }

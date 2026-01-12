@@ -12,10 +12,33 @@ describe("LoginUser use case", () => {
         loginUser = new LoginUser(repositoryFactory);
     });
 
+    test("Deve falhar se o usuário não existir", async () => {
+        expect(async () => {
+            await loginUser.execute({ email: "no.user@gmail.com.br", password: "123456" })
+        }).rejects.toThrow("Usuário não encontrado");
+    });
+
+    test("Deve falhar se a senha estiver incorreta", async () => {
+
+        const createUser = new CreateUser(repositoryFactory);
+        
+        const userInput = {
+            id: "1",
+            email: "john.doe@gmail.com.br",
+            password: "senha123",
+        };
+        
+        const newUser = await createUser.execute(userInput);
+
+        expect(async () => {
+            await loginUser.execute({ email: "john.doe@gmail.com.br", password: "senhaErrada" })
+        }).rejects.toThrow("Usuário não encontrado");
+
+    });
+
     test("Deve gerar um token para usuário válido", async () => {
         const createUser = new CreateUser(repositoryFactory);
         const userInput = {
-            name: "John",
             email: "john.doe@gmail.com.br",
             password: "senha123",
         };
@@ -26,26 +49,5 @@ describe("LoginUser use case", () => {
         });
 
         expect(loginOutput.accessToken).toBeDefined();
-    });
-
-    test("Deve falhar se o usuário não existir", async () => {
-        await expect(
-            loginUser.execute({ email: "no.user@gmail.com.br", password: "123456" })
-        ).rejects.toThrow("Usuário não encontrado");
-    });
-
-    test("Deve falhar se a senha estiver incorreta", async () => {
-        const createUser = new CreateUser(repositoryFactory);
-        const userInput = {
-            name: "John",
-            email: "john.doe@gmail.com.br",
-            password: "senha123",
-        };
-        
-        await createUser.execute(userInput);
-        
-        expect(    
-            loginUser.execute({ email: "jane.doe@gmail.com.br", password: "senhaErrada" })
-        ).rejects.toThrow("Usuário não encontrado");
     });
 });

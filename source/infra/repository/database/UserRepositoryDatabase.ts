@@ -9,30 +9,27 @@ export default class UserRepositoryDatabase implements UserRepositoryInterface {
 
     async create(user: User): Promise<User | null> {
         const exists = await this.findByEmail(user.email);
-        if (exists) throw new Error("Email already exists");
-        await this.connection.execute("insert into users (id, email, password) values ($1, $2, $3);", [user.id, user.email, user.password]);
+        await this.connection.execute("INSERT INTO users (id, email, password) VALUES ($1, $2, $3);", [user.id, user.email, user.password]);
         return await this.findById(user.id);
     }
 
     async findById(id: string): Promise<User | null> {
-        const result = await this.connection.execute("select id, email, password from users where id = $1", [id]);
-        if (result.length === 0) return null;
-        return new User(result[0].email, result[0].password, result[0].id);
+        const result = await this.connection.execute("SELECT id, email, password FROM users WHERE id = $1;", [id]);
+        return result ? new User(result[0].email, result[0].password, result[0].id) : null;
     }
 
     async findByEmail(email: string): Promise<User | null> {
-        const result = await this.connection.execute("select id, email, password from users where email = $1", [email]);
-        if (result.length === 0) return null;
-        return new User(result[0].email, result[0].password, result[0].id);
+        const result = await this.connection.execute("SELECT id, email, password FROM users WHERE email = $1;", [email]);
+        return result ? new User(result[0].email, result[0].password, result[0].id) : null;
     }
 
     async getAll(): Promise<User[]> {
-        const result = await this.connection.execute("select id, email, password from users");
+        const result = await this.connection.execute("SELECT id, email, password FROM users;");
         return result.map((user: any) => new User(user.email, user.password, user.id));
     }
 
     async update(user: User): Promise<User> {
-        await this.connection.execute("update users set email = $1, password = $2 where id = $3", [user.email, user.password, user.id]);
+        await this.connection.execute("UPDATE users SET email = $1, password = $2 WHERE id = $3;", [user.email, user.password, user.id]);
         return user;
     }
 }
