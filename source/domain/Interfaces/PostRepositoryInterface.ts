@@ -6,5 +6,5 @@ export default interface PostRepositoryInterface {
     findById(id: string): Promise<Post | null>;
     findByDate(date: Date): Promise<Post | null>;
     update(post: Post): Promise<Post | null>;
-    delete(id: string): Promise<string>;
+    delete(id: string): Promise<string | null>;
 }

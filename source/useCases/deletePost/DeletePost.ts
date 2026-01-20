@@ -15,9 +15,9 @@ export default class DeletePost {
         
         const id = input.id
 
-        if(!this.postRepository.findById(id)) throw new Error("Post não encontrado")
+        if(!(await this.postRepository.findById(id))) throw new Error("Post não encontrado")
 
-        const post = await this.postRepository.delete(id)
+        const response = await this.postRepository.delete(id)
 
         return {
             message: "Post deletado com sucesso"

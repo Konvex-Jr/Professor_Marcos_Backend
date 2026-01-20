@@ -34,10 +34,10 @@ export default class PostRepositoryMemory implements PostRepositoryInterface {
         return post;
     }
 
-    async delete(id: string): Promise<string> {
+    async delete(id: string): Promise<string | null> {
         const index = this.posts.findIndex(existingPost => existingPost.id === id);
-        const deletedPost = this.posts[index];
-        this.posts[index] = new Post(deletedPost.description, deletedPost.post_string, deletedPost.created_at, deletedPost.updated_at, new Date());
-        return "Post deletado com sucesso"
+        const post = this.posts[index]
+        this.posts[index] = new Post(post.description, post.post_string, post.created_at, post.updated_at, new Date())
+        return this.posts[index] ? "Post deletado com sucesso" : null
     }
 }
