@@ -8,8 +8,7 @@ export default class UserRepositoryDatabase implements UserRepositoryInterface {
     }
 
     async create(user: User): Promise<User | null> {
-        const exists = await this.findByEmail(user.email);
-        await this.connection.execute("INSERT INTO users (id, email, password) VALUES ($1, $2, $3);", [user.id, user.email, user.password]);
+        await this.connection.execute("INSERT INTO users (id, email, password, created_at, updated_at) VALUES ($1, $2, $3, $4, $5);", [user.id, user.email, user.password, new Date(), new Date()]);
         return await this.findById(user.id);
     }
 
