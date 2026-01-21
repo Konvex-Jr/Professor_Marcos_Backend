@@ -1,4 +1,5 @@
 import RepositoryFactory from "../../../domain/Interfaces/RepositoryFactoryInterface";
+import CreatePostInput from "../../../useCases/createPost/CreatePostInput";
 import PostController from "../../controller/PostController";
 import Http from "../Http";
 import ModelRoutes from "./ModelRoutes";
@@ -14,7 +15,7 @@ export default class PostRoutes implements ModelRoutes {
     init(): void {
 
         // CREATE POST
-        this.http.route("post", "/api/posts", true, async (params: any, body: any) => {
+        this.http.route("post", "/api/posts", true, async (params: any, body: CreatePostInput) => {
             return await this.postController.create(body);
         });
 

@@ -23,7 +23,7 @@ describe("FindPostById UseCase", () => {
     const new_post = await createPost.execute(post_input)
     expect(new_post.post).toBeDefined();
     
-    const input: FindPostByIdInput = { post_id: new_post.post.id };
+    const input: FindPostByIdInput = { id: new_post.post.id };
     const result = await findPostById.execute(input);
 
     expect(result.post).toBeDefined()
@@ -38,7 +38,7 @@ describe("FindPostById UseCase", () => {
 
     const post_input = { description: "description test", post_string: "post_string test", created_at: new Date(), updated_at: new Date() };
     const new_post = await createPost.execute(post_input);
-    const input: FindPostByIdInput = { post_id: "1" };
+    const input: FindPostByIdInput = { id: "1" };
 
     await expect(findPostById.execute(input)).rejects.toThrow("Post não encontrado");
   });

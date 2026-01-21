@@ -13,12 +13,16 @@ export default class FindPostById {
     }
 
     async execute(input: FindPostByIdInput): Promise<FindPostByIdOutput> {
+
+        // Criar validação de formato UUID para o Database
         
-        if(!input.post_id) throw new Error("ID do post não fornecido")
-        const response = await this.postRepository.findById(input.post_id);
+        if(!input.id) throw new Error("ID do post não fornecido")
+
+        const response = await this.postRepository.findById(input.id);
+        
         if (!response) throw new Error("Post não encontrado")
         
-        const post = new Post(response.description, response.post_string, response.created_at, response.updated_at, response.deleted_at)
+        const post = new Post(response.description, response.post_string, response.created_at, response.updated_at, response.deleted_at, response.id)
 
         return { 
             post
