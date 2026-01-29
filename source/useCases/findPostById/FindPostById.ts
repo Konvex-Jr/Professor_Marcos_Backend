@@ -16,7 +16,11 @@ export default class FindPostById {
 
         // Criar validação de formato UUID para o Database
         
+        const REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+
         if(!input.id) throw new Error("ID do post não fornecido")
+
+        if(!REGEX.test(input.id)) throw new Error("Formato de ID incorreto")
 
         const response = await this.postRepository.findById(input.id);
         
