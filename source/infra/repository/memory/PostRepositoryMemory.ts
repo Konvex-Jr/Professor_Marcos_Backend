@@ -19,9 +19,17 @@ export default class PostRepositoryMemory implements PostRepositoryInterface {
         return post ?? null;
     }
 
-    async findByDate(created_at: Date): Promise<Post | null> {
-        const post = this.posts.find(post => post.created_at === created_at);
-        return post ?? null;
+    async findByDate(search: Date): Promise<Post[] | null> {
+        
+        const posts = this.posts.filter((post) => {
+
+            const date_search = `${search.getFullYear()}-${(search.getMonth() + 1).toString().padStart(2, '0')}-${search.getDate()}`
+            const created_str = `${post.created_at.getFullYear()}-${(post.created_at.getMonth() + 1).toString().padStart(2, '0')}-${post.created_at.getDate()}`
+            
+            return date_search == created_str
+        })
+        
+        return posts ?? null;
     }
 
     async getAll(): Promise<Post[]> {

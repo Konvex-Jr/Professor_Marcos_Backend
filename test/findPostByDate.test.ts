@@ -24,7 +24,7 @@ describe("FindPostByDate UseCase", () => {
     
     const post_input = { description: "description test", post_string: "post_string test", created_at: new Date(), updated_at: new Date() };
     const new_post = await createPost.execute(post_input);
-    const input: FindPostByDateInput = { created_at: new Date(2024, 3, 15) };
+    const input: FindPostByDateInput = { search: "2024-11-20" };
 
     await expect(findPostByDate.execute(input)).rejects.toThrow("Post não encontrado"); 
   
@@ -37,9 +37,9 @@ describe("FindPostByDate UseCase", () => {
     const newPost = await createPost.execute(inputPost)
 
     const date = {
-      created_at: newPost.post.created_at
+      search: `${newPost.post.created_at.getFullYear()}-${(newPost.post.created_at.getMonth() + 1).toString().padStart(2, '0')}-${newPost.post.created_at.getDate()}`
     }
-    
+
     const findedPost = await findPostByDate.execute(date)
       
     expect(findedPost).toBeDefined()

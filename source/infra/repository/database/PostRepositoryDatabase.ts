@@ -17,14 +17,21 @@ export default class PostRepositoryDatabase implements PostRepositoryInterface {
         return post ? new Post(post.description, post.post_string, post.created_at, post.updated_at, null, post.id) : null;
     }
 
-    async findByDate(created_at: Date): Promise<Post | null> {
-        const result = await this.connection.execute("SELECT id, description, post_string, created_at, updated_at FROM posts WHERE created_at = $1;", [ created_at ]);
-        const post = result[0]
-        return post ? new Post(post.description, post.post_string, post.created_at, post.updated_at, null, post.id) : null
+    async findByDate(search: Date): Promise<Post[] | null> {
+
+        const startOfDay = `${search.getFullYear()}-${search.getMonth() + 1}-${search.getDate()} 00:00:00`;
+
+        const endOfDay = `${search.getFullYear()}-${search.getMonth() + 1}-${search.getDate()} 23:59:59`;
+
+        const result = await this.connection.execute("SELECT id, description, post_string, created_at, updated_at FROM posts WHERE created_at >= $1 AND created_at <= $2;", [ startOfDay, endOfDay ]);
+        
+        return result ? result.map((post: any) =>
+            new Post(post.description, post.post_string, post.created_at, post.updated_at, null, post.id)
+        ) : null
     }
 
     async getAll(): Promise<Post[]> {
-        const result = await this.connection.execute("SELECT id, description, post_string, created_at, updated_at, deleted_at FROM posts;");
+        const result = await this.connection.execute("SELECT id, description, post_string, created_at, updated_at, deleted_at FROM posts WHERE deleted_at IS null;");
         return result.map((post: any) => new Post(post.description, post.post_string, post.created_at, post.updated_at, post.deleted_at, post.id))
     }
 

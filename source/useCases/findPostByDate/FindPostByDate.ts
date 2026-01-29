@@ -14,16 +14,20 @@ export default class FindPostByDate {
 
     async execute(input: FindPostByDateInput): Promise<FindPostByDateOutput> {
         
-        if(!input.created_at) throw new Error("Data não fornecida")
-        
-        const response = await this.postRepository.findByDate(input.created_at);
-        
-        if (!response) throw new Error("Post não encontrado")
-    
-        const post = new Post(response.description, response.post_string, response.created_at, response.updated_at, response.deleted_at, response.id)
+        const search = input.search
+
+        const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+
+        if(!search) throw new Error("Data não fornecida")
+
+        if(!regex.test(search)) throw new Error("Formato de data inválido")
+
+        const response = await this.postRepository.findByDate(new Date(search + "T00:00:00"));
+
+        if (!response?.length) throw new Error("Post não encontrado")
 
         return {
-            post
+            data: response
         }
     }
 }

@@ -31,7 +31,13 @@ export default class ExpressHttp implements Http {
 	private async publicRoutes(method: HttpMethods, url: string, callback: any): Promise<any> {
 		this.app[method](url, async function (req: any, res: any) {
 			try {
+
+				const { search } = req.query
+
+				req.params["search"] = search
+
 				const result = await callback(req.params, req.body);
+				
 				res.json(result);
 			} catch (exception: any) {
 				console.error(exception);
@@ -45,8 +51,15 @@ export default class ExpressHttp implements Http {
 	private async privateRoutes(method: string, url: string, callback: any): Promise<any> {
 		this.app[method](url, this.auth.execute.bind(this.auth), async function (req: any, res: any) {
 			try {
+
+				const { search } = req.query
+
+				req.params["search"] = search
+
 				const result = await callback(req.params, req.body);
+				
 				res.json(result);
+
 			} catch (exception: any) {
 				res.status(422).json({
 					message: exception.message
