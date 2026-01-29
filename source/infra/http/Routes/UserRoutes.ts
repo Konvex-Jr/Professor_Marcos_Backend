@@ -24,7 +24,7 @@ export default class UserRoutes implements ModelRoutes {
         });
     
         // GET USERS
-        this.http.route("get", "/api/users", false, async () => {
+        this.http.route("get", "/api/users", true, async () => {
             return this.userController.getAll();
         })
 

@@ -13,8 +13,6 @@ export default class FindPostById {
     }
 
     async execute(input: FindPostByIdInput): Promise<FindPostByIdOutput> {
-
-        // Criar validação de formato UUID para o Database
         
         const REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 

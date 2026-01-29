@@ -23,7 +23,7 @@ export default class PostRepositoryDatabase implements PostRepositoryInterface {
 
         const endOfDay = `${search.getFullYear()}-${search.getMonth() + 1}-${search.getDate()} 23:59:59`;
 
-        const result = await this.connection.execute("SELECT id, description, post_string, created_at, updated_at FROM posts WHERE created_at >= $1 AND created_at <= $2;", [ startOfDay, endOfDay ]);
+        const result = await this.connection.execute("SELECT id, description, post_string, created_at, updated_at FROM posts WHERE created_at >= $1 AND created_at <= $2 AND deleted_at IS null;", [ startOfDay, endOfDay ]);
         
         return result ? result.map((post: any) =>
             new Post(post.description, post.post_string, post.created_at, post.updated_at, null, post.id)

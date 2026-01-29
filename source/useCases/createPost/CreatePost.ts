@@ -17,7 +17,7 @@ export default class CreatePost {
         const description = input.description
         const post_string = input.post_string
 
-        if(post_string.length === 0){
+        if(!post_string){
             throw new Error("String de imagem não fornecida")
         }
 

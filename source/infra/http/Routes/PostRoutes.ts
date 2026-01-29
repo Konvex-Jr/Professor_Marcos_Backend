@@ -16,12 +16,13 @@ export default class PostRoutes implements ModelRoutes {
     init(): void {
 
         // CREATE POST
-        this.http.route("post", "/api/posts", true, async (body: CreatePostInput) => {
+        this.http.route("post", "/api/posts", true, async (params: any, body: any) => {
+            
             return await this.postController.create(body);
         });
 
         // GET POSTS
-        this.http.route("get", "/api/posts", false, async (params: any) => {
+        this.http.route("get", "/api/posts", false, async (params: any, body: any) => {
             
             if(params.search){
 
@@ -35,7 +36,7 @@ export default class PostRoutes implements ModelRoutes {
         })
 
         // GET POSTS BY ID
-        this.http.route("get", "/api/posts/:id", true, async (params: any) => {
+        this.http.route("get", "/api/posts/:id", true, async (params: any, body: any) => {
             return this.postController.findById(params)
         })
 

@@ -26,7 +26,7 @@ export default class PostRepositoryMemory implements PostRepositoryInterface {
             const date_search = `${search.getFullYear()}-${(search.getMonth() + 1).toString().padStart(2, '0')}-${search.getDate()}`
             const created_str = `${post.created_at.getFullYear()}-${(post.created_at.getMonth() + 1).toString().padStart(2, '0')}-${post.created_at.getDate()}`
             
-            return date_search == created_str
+            return (date_search == created_str && !post.deleted_at)
         })
         
         return posts ?? null;

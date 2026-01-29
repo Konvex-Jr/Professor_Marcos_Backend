@@ -34,11 +34,17 @@ describe("FindPostById UseCase", () => {
     await expect(findPostById.execute({} as any)).rejects.toThrow("ID do post não fornecido");
   });
 
+  test("deve lançar erro se ID não estiver no formato correto", async () => {
+    await expect(findPostById.execute({
+      id: "123-abc-456-789"
+    } as any)).rejects.toThrow("Formato de ID incorreto");
+  });
+
   test("deve lançar erro se post não encontrado", async () => {
 
     const post_input = { description: "description test", post_string: "post_string test", created_at: new Date(), updated_at: new Date() };
     const new_post = await createPost.execute(post_input);
-    const input: FindPostByIdInput = { id: "1" };
+    const input: FindPostByIdInput = { id: "2515a378-3651-4372-b61f-bfbdffb6486c" };
 
     await expect(findPostById.execute(input)).rejects.toThrow("Post não encontrado");
   });
