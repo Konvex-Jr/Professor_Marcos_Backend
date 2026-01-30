@@ -4,10 +4,6 @@ import PostRepositoryInterface from "../../domain/Interfaces/PostRepositoryInter
 import UpdatePostInput from "./UpdatePostInput";
 import UpdatePostOutput from "./UpdatePostOutput";
 
-import FindPostById from "../findPostById/FindPostById";
-import FindPostByDateInput from "../findPostByDate/FindPostByDateInput";
-import FindPostByDateOutput from "../findPostByDate/FindPostByDateOutput";
-
 export default class UpdatePost {
 
     readonly postRepository: PostRepositoryInterface;
@@ -16,24 +12,21 @@ export default class UpdatePost {
         this.postRepository = repositoryFactory.createPostRepository();
     }
 
-    async execute(input: UpdatePostInput): Promise<UpdatePostOutput> {
-    
-        if(!input) {
-            throw new Error("Post não fornecido")
-        }
+    async execute(params: any, input: UpdatePostInput): Promise<UpdatePostOutput> {
+                
+        const { id } = params
+
+        if(!id) throw new Error("ID do post não fornecido")
         
-        // Encontra o POST com base no ID
-        const response = await this.postRepository.findById(input.post.id)
-
-        if(!response) {
-            throw new Error("Post não encontrado")
-        }
-
-        const description = input.post.description
-        const post_string = input.post.post_string
-        const created_at = response.created_at
-
-        const post = new Post(description, post_string, created_at, new Date(), null)
+        const REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+        
+        if(!REGEX.test(id)) throw new Error("Formato de ID incorreto")
+            
+        const response = await this.postRepository.findById(id)
+            
+        if(!response) throw new Error("Post não encontrado")
+                
+        const post = await this.postRepository.update(params, input)
 
         return {
             post

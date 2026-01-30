@@ -1,5 +1,4 @@
-import Post from "../../domain/Entity/Post";
-
 export default interface UpdatePostInput {
-    post: Post;
+    description: string,
+    post_string: string
 }

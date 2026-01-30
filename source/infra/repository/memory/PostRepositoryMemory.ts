@@ -1,5 +1,6 @@
 import Post from "../../../domain/Entity/Post";
 import PostRepositoryInterface from "../../../domain/Interfaces/PostRepositoryInterface";
+import UpdatePostInput from "../../../useCases/updatePost/UpdatePostInput";
 
 export default class PostRepositoryMemory implements PostRepositoryInterface {
 
@@ -36,10 +37,17 @@ export default class PostRepositoryMemory implements PostRepositoryInterface {
         return this.posts;
     }
 
-    async update(post: Post): Promise<Post | null> {
-        const index = this.posts.findIndex(existingPost => existingPost.id === post.id);
-        this.posts[index] = post;
-        return post;
+    async update(params: any, input: UpdatePostInput): Promise<Post> {
+        
+        const { id } = params
+
+        const index = this.posts.findIndex(post => post.id === id);
+
+        const post = this.posts[index]
+        
+        this.posts[index] = new Post(input.description, input.post_string, post.created_at, new Date(), post.deleted_at, post.id);
+        
+        return this.posts[index];
     }
 
     async delete(id: string): Promise<string | null> {

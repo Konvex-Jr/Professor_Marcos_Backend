@@ -43,9 +43,9 @@ export default class PostController {
         return await findByDate.execute(input)
     }
 
-    async update(input: UpdatePostInput): Promise<UpdatePostOutput> {
+    async update(params: any, input: UpdatePostInput): Promise<UpdatePostOutput> {
         const updatePost = new UpdatePost(this.repositoryFactory)
-        return await updatePost.execute(input)
+        return await updatePost.execute(params, input)
     }
 
     async delete(input: DeletePostInput): Promise<DeletePostOutput> {

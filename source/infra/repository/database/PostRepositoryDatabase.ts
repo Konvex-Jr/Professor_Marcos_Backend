@@ -1,5 +1,6 @@
 import Post from "../../../domain/Entity/Post";
 import PostRepositoryInterface from "../../../domain/Interfaces/PostRepositoryInterface";
+import UpdatePostInput from "../../../useCases/updatePost/UpdatePostInput";
 import Connection from "../../database/Connection";
 
 export default class PostRepositoryDatabase implements PostRepositoryInterface {
@@ -35,9 +36,17 @@ export default class PostRepositoryDatabase implements PostRepositoryInterface {
         return result.map((post: any) => new Post(post.description, post.post_string, post.created_at, post.updated_at, post.deleted_at, post.id))
     }
 
-    async update(post: Post): Promise<Post> {
-        await this.connection.execute("UPDATE posts SET description = $1, post_string = $2, updated_at = $3 WHERE id = $4;", [post.description, post.post_string, post.updated_at, post.id]);
-        return new Post(post.description, post.post_string, post.created_at, post.updated_at, post.deleted_at, post.id);
+    async update(params: any, input: UpdatePostInput): Promise<Post> {
+        
+        const { id } = params
+
+        await this.connection.execute("UPDATE posts SET description = $1, post_string = $2, updated_at = $3 WHERE id = $4;", [input.description, input.post_string, new Date(), id]);
+    
+        const response = await this.connection.execute("SELECT * FROM posts WHERE id = $1;", [ id ]);
+
+        const post = response[0]
+
+        return new Post(post.description, post.post_string, post.created_at, post.updated_at, post.deleted_at, post.id)
     }
 
     async delete(id: string): Promise<string> {

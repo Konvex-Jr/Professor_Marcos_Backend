@@ -1,6 +1,5 @@
 import RepositoryFactory from "../../../domain/Interfaces/RepositoryFactoryInterface";
 import CreatePostInput from "../../../useCases/createPost/CreatePostInput";
-import FindPostByDateInput from "../../../useCases/findPostByDate/FindPostByDateInput";
 import PostController from "../../controller/PostController";
 import Http from "../Http";
 import ModelRoutes from "./ModelRoutes";
@@ -28,26 +27,26 @@ export default class PostRoutes implements ModelRoutes {
 
                 const search = params.search
                 
-                return this.postController.findByDate({ search })
+                return await this.postController.findByDate({ search })
             
             } else {
-                return this.postController.getAll();
+                return await this.postController.getAll();
             }
         })
 
         // GET POSTS BY ID
         this.http.route("get", "/api/posts/:id", true, async (params: any, body: any) => {
-            return this.postController.findById(params)
+            return await this.postController.findById(params)
         })
 
         // UPDATE POST
-        this.http.route("put", "/api/posts/:id", true, async (params: any, body: any) => {
-            return this.postController.update(body)
+        this.http.route("patch", "/api/posts/:id", true, async (params: any, body: any) => {
+            return await this.postController.update(params, body)
         })
 
         // DELETE POST
         this.http.route("delete", "/api/posts/:id", true, async (params: any, body: any) => {
-            return this.postController.delete(params)
+            return await this.postController.delete(params)
         })
 
         
