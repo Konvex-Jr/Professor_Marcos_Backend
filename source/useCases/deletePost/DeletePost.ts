@@ -15,6 +15,10 @@ export default class DeletePost {
         
         const id = input.id
 
+        const REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+
+        if(!REGEX.test(input.id)) throw new Error("Formato de ID incorreto")
+
         if(!(await this.postRepository.findById(id))) throw new Error("Post não encontrado")
 
         const response = await this.postRepository.delete(id)

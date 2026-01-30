@@ -26,7 +26,7 @@ export default class PostRepositoryMemory implements PostRepositoryInterface {
             const date_search = `${search.getFullYear()}-${(search.getMonth() + 1).toString().padStart(2, '0')}-${search.getDate()}`
             const created_str = `${post.created_at.getFullYear()}-${(post.created_at.getMonth() + 1).toString().padStart(2, '0')}-${post.created_at.getDate()}`
             
-            return (date_search == created_str && !post.deleted_at)
+            return (date_search === created_str && !post.deleted_at)
         })
         
         return posts ?? null;
@@ -43,9 +43,9 @@ export default class PostRepositoryMemory implements PostRepositoryInterface {
     }
 
     async delete(id: string): Promise<string | null> {
-        const index = this.posts.findIndex(existingPost => existingPost.id === id);
+        const index = this.posts.findIndex(post => post.id === id);
         const post = this.posts[index]
         this.posts[index] = new Post(post.description, post.post_string, post.created_at, post.updated_at, new Date())
-        return this.posts[index] ? "Post deletado com sucesso" : null
+        return post ? "Post deletado com sucesso" : null
     }
 }

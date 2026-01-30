@@ -14,10 +14,22 @@ describe("UpdatePost UseCase", () => {
     deletePost = new DeletePost(repositoryFactory);
   });
 
-  test("lança erro caso não encontre um post", async () => {
+  test("deve lançar erro se ID não estiver no formato correto", async () => {
     
         const input = {
             id: '1'
+        }
+
+        expect(async () => {
+            const response = await deletePost.execute(input)
+        }).rejects.toThrow("Formato de ID incorreto")
+
+  });
+
+  test("lança erro caso não encontre um post", async () => {
+    
+        const input = {
+            id: '8295fd9c-616e-4f6d-b814-360396cf7342'
         }
 
         expect(async () => {
