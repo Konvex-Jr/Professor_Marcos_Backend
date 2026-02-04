@@ -37,7 +37,7 @@ describe("FindPostByDate UseCase", () => {
     const newPost = await createPost.execute(inputPost)
 
     const date = {
-      search: `${newPost.post.created_at.getFullYear()}-${(newPost.post.created_at.getMonth() + 1).toString().padStart(2, '0')}-${newPost.post.created_at.getDate()}`
+      search: `${newPost.post.created_at.getFullYear()}-${(newPost.post.created_at.getMonth() + 1).toString().padStart(2, '0')}-${newPost.post.created_at.getDate().toString().padStart(2, '0')}`
     }
 
     const findedPost = await findPostByDate.execute(date)
